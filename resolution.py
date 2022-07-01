@@ -247,7 +247,7 @@ if __name__ == "__main__":
     parser.add_argument('files', nargs="*", metavar="FILE", help="*.tif files to process, generates syntetic data if no files are specified")
     parser.add_argument("--crop", nargs=4, type=int, metavar=("TOP", "BOTTOM", "LEFT", "RIGHT"),  default=(0, 0, 0, 0),
             help="crop image margins (default: 0 0 0 0)")
-    parser.add_argument("--pixel", type=float, default=1, help="pixel size (default: 1nm)")
+    #parser.add_argument("--pixel", type=float, default=1, help="pixel size (default: 1nm)")
     parser.add_argument("--wait", action="store_true", help="wait after each image")
     parser.add_argument("--interval", type=int, default=10, help="profile interval along contour (default: 10)")
     parser.add_argument("--length", type=int, default=75, help="profile length (default: 75)")
