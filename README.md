@@ -1,7 +1,7 @@
 # SEM Resolution
 
 This program is designed to determine SEM resolution form the image of gold nanoparticles on carbon.
-The gaussian profile is fitted to the particle edges, and the width (&sigma;) is repoted.
+The gaussian profile is fitted to the particle edges, and the width (&sigma;) is reported.
 
 
 ## Instal
