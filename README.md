@@ -46,7 +46,7 @@ Edges are found by [thresholding in the minimum of the histogram](https://scikit
 [Gaussian cummulative density function](https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.ndtr.html)
 is fitted to profiles perpedicular to the edges (`--length`, `--interval`).
 
-The statistics (mean, standar deviation, median and quartiles) for resulting &sigma; of the best fit profiles are reported (`--fraction`).
+The statistics (mean, standard deviation, median and quartiles) for resulting &sigma; of the best fit profiles are reported (`--fraction`).
 
 
 ## Output
