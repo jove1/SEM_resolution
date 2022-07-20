@@ -1,6 +1,6 @@
 # SEM Resolution
 
-This program is designed to determine SEM resolution form the image of gold nanoparticles on carbon.
+This program is designed to determine SEM resolution from the image of gold nanoparticles on carbon.
 [Gaussian profile](https://en.wikipedia.org/wiki/Normal_distribution) is fitted across particle edges, and the width (&sigma;) is reported.
 
 
@@ -29,12 +29,25 @@ optional arguments:
   -h, --help            show this help message and exit
   --crop TOP BOTTOM LEFT RIGHT
                         crop image margins (default: 0 0 0 0)
-  --pixel PIXEL         pixel size (default: 1nm)
   --wait                wait after each image
   --interval INTERVAL   profile interval along contour (default: 10)
   --length LENGTH       profile length (default: 75)
   --fraction FRACTION   fraction of included profiles ordered by fit residual (default: 0.2)
 ```
+
+## Operation
+
+The histogram is checked for under/over exposed images that are rejected.
+The criterium is **less than 1% of pixels in low/high 1/16 of histogram**. This is
+indicated by green/red area and vertical lines in output report.
+
+Edges are found by [thresholding in the minimum of the histogram](https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_minimum).
+
+[Gaussian cummulative density function](https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.ndtr.html)
+is fitted to profiles perpedicular to the edges (`--length`, `--interval`).
+
+The statistics (mean, std, median and quartiles) for resulting &sigma; of the best (`--fraction`) fit profiles are reported.
+
 
 ## Output
 
