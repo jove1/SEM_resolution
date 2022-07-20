@@ -49,11 +49,14 @@ def resolution(data, label, options):
         print("image too small")
         return
 
-    if data.dtype != np.uint16:
-        print("not a 16-bit image")
+    if data.dtype == np.uint16:
+        data = data/65535
+    elif data.dtype == np.uint8:
+        data = data/255
+    else:
+        print("not 8-bit or 16-bit image")
         return
 
-    data = data/65535
 
     fig = plt.figure(figsize=(10, 7.5))
     ax_image = fig.add_subplot(231)
@@ -212,31 +215,41 @@ def resolution(data, label, options):
     ax_image.add_collection(c_profiles)
     ax_image.add_collection(c_contours)
 
+    n_total = len(s)
     t = t[idx]
     s = s[idx]
-
-    p25, p50, p75 = np.percentile(s, [25,50,75])
-    report = (
-        "#      {}\n"
-        "mean   {:.2f} px\n"
-        "std    {:.2f} px\n"
-        "25%    {:.2f} px\n"
-        "median {:.2f} px\n"
-        "75%    {:.2f} px\n"
-        ).format(
-            len(idx),
-            np.mean(s), 
-            np.std(s), 
-            p25,
-            p50, # np.median(s)
-            p75
-        )
-    print(report, end="")
+    n_included = len(s)
 
     ax_polar.plot(t, s, ".", zorder=0, ms=3)
     ax_polar.set_rlim(0, 2*np.mean(s))
+
+
+    stat_labels = ["mean", "std", "25%", "median", "75%"]
+    stats = np.array([ np.mean(s), np.std(s), *np.percentile(s, [25,50,75]) ])
+    factors = [0.77, 1, 1.35, 2]
+    factor_labels = [ "{:.2f}σ\n({:.1f}%-\n{:.1f}%)".format(x, 100*stepf(-x/2), 100*stepf(x/2)) for x in factors]
+
+    report = "Statistics for {} best profiles out of total {}.\n".format(n_included, n_total)
+
+    row = [""] + factor_labels
+    table = [row]
+    for s, sl in zip(stats, stat_labels):
+        row = [sl]
+        for x in factors:
+            row.append("{:.2f}".format(s*x))
+        table.append(row)
+
+    import texttable
+    t = texttable.Texttable(0)
+    #t.set_deco(0)
+    t.set_cols_dtype(["t"]*(len(factors)+1))
+    t.add_rows(table)
+
+    report += t.draw()
+    print(report)
+
     ax_text.axis("off")
-    ax_text.text(0.5, 0.5, report, font="monospace", ha="center", multialignment="left", va="center", transform=ax_text.transAxes)
+    ax_text.text(0.5, 0.5, report, font="monospace", ha="center", multialignment="left", va="center", transform=ax_text.transAxes, size='small')
 
     fig.tight_layout()
 
